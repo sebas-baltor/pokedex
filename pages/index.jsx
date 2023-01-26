@@ -31,8 +31,8 @@ export default function Index({ pokemones }) {
             alt="pikachu"
           />
         </div>
-        <div className="flex justify-end items-center h-1/2">
-          <div className="w-full">
+        <div className="flex justify-end items-center h-1/4">
+          <div className="w-full h-full">
             <Carousel
               responsive={responsive}
               showDots={false}
