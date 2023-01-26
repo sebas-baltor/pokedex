@@ -7,7 +7,7 @@ export default function Index({ pokemones }) {
   const responsive = {
     tablet: {
       breakpoint: { max: 1024, min: 464 },
-      items: 5,
+      items: 3,
       partialVisiblilityGutter: 40,
     },
     mobile: {
