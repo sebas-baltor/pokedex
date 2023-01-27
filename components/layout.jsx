@@ -3,12 +3,12 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 const variantsToggle = {
-  open: { opacity: 1, rotate:0 },
-  closed: { opacity: 0, rotate:10 },
+  open: { rotate:0 },
+  closed: {rotate:10 },
 };
 const variantsNav = {
-  opend: { opacity: 1, y:100 },
-  closed: { opacity: 0, y:0 },
+  opend: { opacity: 1, y:0 },
+  closed: { opacity: 0, y:"-100%" },
 };
 const variantsSearch = {
   open: {},
@@ -20,29 +20,31 @@ export default function Layout({ children, home }) {
   return (
     <>
       <motion.nav
-        className="w-full fixed z-30 top-0 left-0 flex justify-between items-center px-2"
+        className="w-full fixed z-30 top-0 left-0 flex justify-between items-center p-2"
         animate={isOpen ? "open" : "closed"}
       >
         <motion.div className="font-bold">Pokedex</motion.div>
-        <motion.form className="flex justify-center items-center">
+        <motion.form className="flex relative justify-center items-center rounded-full bg-white w-1/2 overflow-hidden px-2">
           <motion.input
-            type="search"
-            className="bg-inherit p-1 runded focus:bg-sky-100"
+            type="text"
+            className="bg-inherit pl-1 pr-4 runded outline-none w-full"
           ></motion.input>
           <motion.button
             type="submit"
-            className="w-7 h-7 rounded-full bg-sky-100 flex justify-center items-center"
-            variants={variantsToggle}
-            animate={isOpen?"opend":"closed"}
+            className="w-7 h-7 rounded-full flex justify-center items-center absolute top-0 right-0"
           >
-            <BiSearchAlt />
+            <BiSearchAlt className="group-focus:decoration-cyan-100"/>
           </motion.button>
         </motion.form>
-        <motion.button onClick={() => setIsOpen((isOpen) => !isOpen)}>
+        <motion.button 
+        onClick={() => setIsOpen((isOpen) => !isOpen)}
+        variants={variantsToggle}
+        animate={isOpen?"opend":"closed"}
+        >
           <BiMenuAltRight />
         </motion.button>
         <motion.ul
-          className="absolute z-20 top-14 left-0 w-full flex flex-col justify-center items-center bg-sky-100"
+          className="absolute z-[-15] top-0 left-0 w-full h-[100vh] flex flex-col justify-center items-center bg-sky-100 gap-2"
           variants={variantsNav}
           animate={isOpen ? "opend" : "closed"}
         >
