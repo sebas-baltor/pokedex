@@ -18,7 +18,7 @@ export default function Index({ pokemones }) {
   };
   return (
     <Layout home>
-      <div className="max-w-screen-lg  w-full h-[100vh] bg-slate-100 overflow-hidden">
+      <div className="w-full h-[100vh] bg-slate-100 overflow-hidden">
         <div className="relative w-full h-2/5 mt-12 flex justify-center">
           <h1 className="absolute z-10 whitespace-nowrap text-7xl font-black top-1/4">
             PIKACHU
@@ -31,9 +31,9 @@ export default function Index({ pokemones }) {
             alt="pikachu"
           />
         </div>
-        <div className="flex justify-end items-center h-1/4">
-          <div className="w-full h-full">
-            {/* <Carousel
+          <div className="w-full h-1/3 mt-16 flex fustify-center items-center">
+            <Carousel
+            className="w-full h-full"
               responsive={responsive}
               showDots={false}
               draggable={true}
@@ -47,25 +47,24 @@ export default function Index({ pokemones }) {
               {pokemones.map((pokemon) => {
                 return <PokeCard pokemon={pokemon} key={pokemon.id} />;
               })}
-            </Carousel> */}
+            </Carousel>
           </div>
-        </div>
       </div>
     </Layout>
   );
 }
 export async function getStaticProps() {
   let offset = Math.floor((Math.random() * 1008) % 6);
-  // const res = await fetch(
-  //   `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=6`
-  // );
-  // const json = await res.json();
+  const res = await fetch(
+    `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=6`
+  );
+  const json = await res.json();
   const pokemones = [];
-  // for (let item of json.results) {
-  //   const res = await fetch(item.url);
-  //   const json = await res.json();
-  //   pokemones.push(json);
-  // }
+  for (let item of json.results) {
+    const res = await fetch(item.url);
+    const json = await res.json();
+    pokemones.push(json);
+  }
   return {
     props: {
       pokemones,
