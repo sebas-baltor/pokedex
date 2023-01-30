@@ -18,6 +18,7 @@ export default function Layout({ children, home }) {
   const handlerSubmit = (e) => {
     e.preventDefault();
     Router.push(`/pokemon/${search}`);
+    setSearch("");
   }
   return (
     <>
@@ -53,11 +54,11 @@ export default function Layout({ children, home }) {
           variants={variantsNav}
           animate={isOpen ? "opend" : "closed"}
         >
-          <motion.li>
-            <Link href={"pokemon/byPage"}>Pokemon</Link>
+          <motion.li onClick={()=>setIsOpen(isOpen=>!isOpen)}>
+            <Link href={"/pokemon/byPage"} replace>Pokemon</Link>
           </motion.li>
-          <motion.li>
-            <Link href={"pokemon/1"}>Pokemon 1</Link>
+          <motion.li onClick={()=>setIsOpen(isOpen=>!isOpen)}>
+            <Link href={"/pokemon/1"} replace>Pokemon 1</Link>
           </motion.li>
         </motion.ul>
       </motion.nav>
