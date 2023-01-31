@@ -1,8 +1,13 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { AiOutlineColumnHeight, AiOutlineDotChart,AiFillHeart,AiFillStar } from "react-icons/ai";
+import {
+  AiOutlineColumnHeight,
+  AiOutlineDotChart,
+  AiFillHeart,
+  AiFillStar,
+} from "react-icons/ai";
 import { GiWeight } from "react-icons/gi";
-import {RiSwordFill,RiShieldStarFill,RiShieldFill} from "react-icons/ri";
+import { RiSwordFill, RiShieldStarFill, RiShieldFill } from "react-icons/ri";
 import { BiRun } from "react-icons/bi";
 import Layout from "../../components/layout";
 import colorQuantization from "../../hook/colorQuantization";
@@ -12,26 +17,37 @@ export default function Pokemon() {
   const [pokemon, setPokemon] = useState(null);
   const router = useRouter();
   const decorators = [
-    { // hp
-        icon: <AiFillHeart className="text-red-500"/>,
-        bgColor: "bg-red-500"
-    },{ // attack
-        icon: <RiSwordFill className="text-orange-500"/>,
-        bgColor: "bg-orange-500"
-    },{ // defense
-        icon: <RiShieldFill className="text-slate-500"/>,
-        bgColor: "bg-slate-500"
-    },{ // special attack
-        icon: <AiFillStar className="text-violet-500"/>,
-        bgColor: "bg-violet-500"
-    },{ // special defense
-        icon: <RiShieldStarFill className="text-fuchsia-500"/>,
-        bgColor: "bg-fuchsia-500"
-    }, {// speed
-        icon: <BiRun className="text-cyan-500"/>,
-        bgColor: "bg-cyan-500"
-    }
-  ]
+    {
+      // hp
+      icon: <AiFillHeart className="text-red-500" />,
+      bgColor: "bg-red-500",
+    },
+    {
+      // attack
+      icon: <RiSwordFill className="text-orange-500" />,
+      bgColor: "bg-orange-500",
+    },
+    {
+      // defense
+      icon: <RiShieldFill className="text-slate-500" />,
+      bgColor: "bg-slate-500",
+    },
+    {
+      // special attack
+      icon: <AiFillStar className="text-violet-500" />,
+      bgColor: "bg-violet-500",
+    },
+    {
+      // special defense
+      icon: <RiShieldStarFill className="text-fuchsia-500" />,
+      bgColor: "bg-fuchsia-500",
+    },
+    {
+      // speed
+      icon: <BiRun className="text-cyan-500" />,
+      bgColor: "bg-cyan-500",
+    },
+  ];
   useEffect(() => {
     const setData = async () => {
       let res = await fetch(
@@ -41,7 +57,7 @@ export default function Pokemon() {
     };
     setData();
   });
- 
+
   if (!pokemon) {
     return <div className="bg-slate-300">Cargando...</div>;
   }
@@ -64,49 +80,52 @@ export default function Pokemon() {
               />
             )}
           </div>
-          <div className="flex flex-col gap-1">
-            <div className="font-black text-center">
-              {pokemon.name.toUpperCase().replace("-"," ")}
+          <div>
+            <div className="flex flex-col gap-1">
+              <div className="font-black text-center">
+                {pokemon.name.toUpperCase().replace("-", " ")}
+              </div>
+              <div className="whitespace-nowrap flex gap-1">
+                <AiOutlineDotChart className="text-lime-500" />
+                {` ${pokemon.base_experience} xp.`}
+              </div>
+              <div className="flex gap-1">
+                <AiOutlineColumnHeight className="text-orange-500" />
+                {parseInt(pokemon.height) / 10} m.
+              </div>
+              <div className="flex gap-1">
+                <GiWeight className="text-orange-900" />
+                {parseInt(pokemon.weight) / 10} kg.
+              </div>
             </div>
-            <div className="whitespace-nowrap flex gap-1">
-              <span className="flex items-center justify-center w-6 h-6 rounded-full bg-lime-500">
-                <AiOutlineDotChart className="text-white" />
-              </span>
-              {` ${pokemon.base_experience} xp.`}
-            </div>
-            <div className="flex gap-1">
-              <span className="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500">
-                <AiOutlineColumnHeight className="text-white" />
-              </span>
-              {parseInt(pokemon.height) / 10} m.
-            </div>
-            <div className="flex gap-1">
-              <span className="flex items-center justify-center w-6 h-6 rounded-full bg-orange-900">
-                <GiWeight className="text-white" />
-              </span>
-              {parseInt(pokemon.weight) / 10} kg.
+            <div>
+              {pokemon.types.map((type)=>{
+                return (
+                  <div>
+                    {type.type.name}
+                  </div>
+                )
+              })}
             </div>
           </div>
           <div className="col-span-2 flex flex-col justify-between items-center gap-1">
-            {pokemon.stats.map((stat,i) => {
-              let widthStat = `w-[${parseInt(
-                stat.base_stat
-              )}%] h-full bg-slate-400`;
+            {pokemon.stats.map((stat, i) => {
               return (
-                <div className="grid grid-cols-7 w-full text-sm">
+                <div className="grid grid-cols-7 w-full text-sm ">
                   <div>{decorators[i].icon}</div>
                   <div className="w-full bg-white h-full col-span-6 overflow-hidden">
                     <div
                       className={`h-full ${decorators[i].bgColor} text-white pl-1`}
-                      style={{width:`${stat.base_stat/2}%`}}
-                    >{
-                        stat.base_stat+"%"
-                    }</div>
+                      style={{ width: `${stat.base_stat / 2}%` }}
+                    >
+                      {stat.base_stat + "%"}
+                    </div>
                   </div>
                 </div>
               );
             })}
           </div>
+          <div>cantidad de movimientos: {pokemon.forms.length}</div>
         </div>
       </div>
     </Layout>
