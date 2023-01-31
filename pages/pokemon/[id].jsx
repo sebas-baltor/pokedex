@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import {fetchSingleItem,fetchMultipleItems} from "../../lib/pokemon";
 import {
   AiOutlineColumnHeight,
   AiOutlineDotChart,
@@ -14,7 +15,7 @@ import colorQuantization from "../../hook/colorQuantization";
 // import {colorQuantization} from 'color-quantization'
 
 export default function Pokemon() {
-  const [pokemon, setPokemon] = useState(null);
+  const [pokemonData, setPokemonData] = useState({pokemon:{},abilities:[],specie:{},evolutions:{}});
   const router = useRouter();
   const decorators = [
     {
@@ -50,15 +51,17 @@ export default function Pokemon() {
   ];
   useEffect(() => {
     const setData = async () => {
-      let res = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${router.query.id}`
-      );
-      setPokemon(await res.json());
-    };
+      let pokemon = await fetchSingleItem(`https://pokeapi.co/api/v2/pokemon/${router.query.id}`)
+      let abilities = await fetchMultipleItems(pokemon.abilities);
+      let specie = await fetchSingleItem(pokemon.species.url);
+      let evolutions = await fetchSingleItem(specie.evolution_chain.url);
+      setPokemonData({pokemon,abilities,specie,evolutions});
+    }
     setData();
+    // console.log(pokemonData)
   });
 
-  if (!pokemon) {
+  if (!pokemonData.pokemon) {
     return <div className="bg-slate-300">Cargando...</div>;
   }
   return (
@@ -66,40 +69,40 @@ export default function Pokemon() {
       <div className="bg-slate-100 h-[100vh] pt-12 flex justify-center items-center">
         <div className="grid grid-rows-3 grid-cols-2 gap-2 w-full h-full m-2">
           <div className="flex justify-center items-center">
-            {pokemon.sprites.other.dream_world.front_default ? (
+            {pokemonData.pokemon.sprites.other.dream_world.front_default ? (
               <img
                 className="h-full"
-                src={pokemon.sprites.other.dream_world.front_default}
-                alt={pokemon.name}
+                src={pokemonData.pokemon.sprites.other.dream_world.front_default}
+                alt={pokemonData.pokemon.name}
               />
             ) : (
               <img
                 className="w-full"
-                src={pokemon.sprites.front_default}
-                alt={pokemon.name}
+                src={pokemonData.pokemon.sprites.front_default}
+                alt={pokemonData.pokemon.name}
               />
             )}
           </div>
           <div>
             <div className="flex flex-col gap-1">
               <div className="font-black text-center">
-                {pokemon.name.toUpperCase().replace("-", " ")}
+                {pokemonData.pokemon.name.toUpperCase().replace("-", " ")}
               </div>
               <div className="whitespace-nowrap flex gap-1">
                 <AiOutlineDotChart className="text-lime-500" />
-                {` ${pokemon.base_experience} xp.`}
+                {` ${pokemonData.pokemon.base_experience} xp.`}
               </div>
               <div className="flex gap-1">
                 <AiOutlineColumnHeight className="text-orange-500" />
-                {parseInt(pokemon.height) / 10} m.
+                {parseInt(pokemonData.pokemon.height) / 10} m.
               </div>
               <div className="flex gap-1">
                 <GiWeight className="text-orange-900" />
-                {parseInt(pokemon.weight) / 10} kg.
+                {parseInt(pokemonData.pokemon.weight) / 10} kg.
               </div>
             </div>
             <div>
-              {pokemon.types.map((type)=>{
+              {pokemonData.pokemon.types.map((type)=>{
                 return (
                   <div>
                     {type.type.name}
@@ -109,7 +112,7 @@ export default function Pokemon() {
             </div>
           </div>
           <div className="col-span-2 flex flex-col justify-between items-center gap-1">
-            {pokemon.stats.map((stat, i) => {
+            {pokemonData.pokemon.stats.map((stat, i) => {
               return (
                 <div className="grid grid-cols-7 w-full text-sm ">
                   <div>{decorators[i].icon}</div>
@@ -125,7 +128,7 @@ export default function Pokemon() {
               );
             })}
           </div>
-          <div>cantidad de movimientos: {pokemon.forms.length}</div>
+          <div>cantidad de movimientos: {pokemonData.pokemon.forms.length}</div>
         </div>
       </div>
     </Layout>
