@@ -43,6 +43,7 @@ export default function Index({ pokemones }) {
               centerMode={true}
               autoPlaySpeed={3000}
               autoPlay={true}
+              
             >
               {pokemones.map((pokemon) => {
                 return <PokeCard pokemon={pokemon} key={pokemon.id} />;

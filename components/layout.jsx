@@ -54,6 +54,14 @@ export default function Layout({ children, home }) {
           variants={variantsNav}
           animate={isOpen ? "opend" : "closed"}
         >
+          {!home?(
+          <motion.li>
+            <Link href={"/"}>Home</Link>
+          </motion.li>
+
+          ):(
+            <div></div>
+          )}
           <motion.li onClick={()=>setIsOpen(isOpen=>!isOpen)}>
             <Link href={"/pokemon/byPage"} replace>Pokemon</Link>
           </motion.li>

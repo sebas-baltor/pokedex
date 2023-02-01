@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import {fetchSingleItem,fetchMultipleItems} from "../../lib/pokemon";
+import Carousel from "react-multi-carousel";
+import { fetchSingleItem, fetchMultipleItems } from "../../lib/pokemon";
 import {
   AiOutlineColumnHeight,
   AiOutlineDotChart,
@@ -11,11 +12,25 @@ import { GiWeight } from "react-icons/gi";
 import { RiSwordFill, RiShieldStarFill, RiShieldFill } from "react-icons/ri";
 import { BiRun } from "react-icons/bi";
 import Layout from "../../components/layout";
-import colorQuantization from "../../hook/colorQuantization";
-// import {colorQuantization} from 'color-quantization'
+import PokeMoves from "../../components/pokeMoves";
+const responsive = {
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+  },
+};
 
 export default function Pokemon() {
-  const [pokemonData, setPokemonData] = useState({pokemon:{},abilities:[],specie:{},evolutions:{}});
+  const [pokemonData, setPokemonData] = useState({
+    pokemon: {},
+    abilities: [],
+    specie: {},
+    evolutions: {},
+  });
   const router = useRouter();
   const decorators = [
     {
@@ -51,17 +66,19 @@ export default function Pokemon() {
   ];
   useEffect(() => {
     const setData = async () => {
-      let pokemon = await fetchSingleItem(`https://pokeapi.co/api/v2/pokemon/${router.query.id}`)
-      let abilities = await fetchMultipleItems(pokemon.abilities);
+      let pokemon = await fetchSingleItem(
+        `https://pokeapi.co/api/v2/pokemon/${router.query.id}`
+      );
+      let abilities = fetchMultipleItems(pokemon.abilities);
       let specie = await fetchSingleItem(pokemon.species.url);
       let evolutions = await fetchSingleItem(specie.evolution_chain.url);
-      setPokemonData({pokemon,abilities,specie,evolutions});
-    }
+      setPokemonData({ pokemon, abilities, specie, evolutions });
+    };
     setData();
     // console.log(pokemonData)
   });
 
-  if (!pokemonData.pokemon) {
+  if (Object.entries(pokemonData.evolutions).length < 1) {
     return <div className="bg-slate-300">Cargando...</div>;
   }
   return (
@@ -72,7 +89,9 @@ export default function Pokemon() {
             {pokemonData.pokemon.sprites.other.dream_world.front_default ? (
               <img
                 className="h-full"
-                src={pokemonData.pokemon.sprites.other.dream_world.front_default}
+                src={
+                  pokemonData.pokemon.sprites.other.dream_world.front_default
+                }
                 alt={pokemonData.pokemon.name}
               />
             ) : (
@@ -102,12 +121,8 @@ export default function Pokemon() {
               </div>
             </div>
             <div>
-              {pokemonData.pokemon.types.map((type)=>{
-                return (
-                  <div>
-                    {type.type.name}
-                  </div>
-                )
+              {pokemonData.pokemon.types.map((type) => {
+                return <div>{type.type.name}</div>;
               })}
             </div>
           </div>
@@ -128,7 +143,31 @@ export default function Pokemon() {
               );
             })}
           </div>
-          <div>cantidad de movimientos: {pokemonData.pokemon.forms.length}</div>
+          <div className="bg-slate-100">
+            <div><h4 className="text-center">Abilities</h4></div>
+            <Carousel
+              className="max-h-full max-w-full overflow-hidden"
+              responsive={responsive}
+              removeArrowOnDeviceType={["tablet", "mobile"]}
+            >
+              {pokemonData.abilities.map((ability) => {
+                return <PokeMoves key={ability.id} move={ability} />;
+              })}
+              
+            </Carousel>
+          </div>
+          <div className="bg-slate-600">
+              <div><h4 className="text-center">Evolutions</h4></div>
+              <Carousel
+              responsive={responsive}
+              removeArrowOnDeviceType={["tablet", "mobile"]}
+              
+              >
+                <div>pokemon1</div>
+                <div>pokemon2</div>
+                <div>pokemon3</div>
+              </Carousel>
+          </div>
         </div>
       </div>
     </Layout>
