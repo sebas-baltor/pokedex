@@ -1,7 +1,11 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
-import { fetchSingleItem, fetchMultipleItems } from "../../lib/pokemon";
+import {
+  fetchSingleItem,
+  fetchMultipleItems,
+  getEvolutions,
+} from "../../lib/pokemon";
 import {
   AiOutlineColumnHeight,
   AiOutlineDotChart,
@@ -29,8 +33,9 @@ export default function Pokemon() {
     pokemon: {},
     abilities: [],
     specie: {},
-    evolutions: {},
+    evolutions: [],
   });
+  const [evolutions, setEvolutions] = useState([]);
   const router = useRouter();
   const decorators = [
     {
@@ -71,14 +76,16 @@ export default function Pokemon() {
       );
       let abilities = fetchMultipleItems(pokemon.abilities);
       let specie = await fetchSingleItem(pokemon.species.url);
-      let evolutions = await fetchSingleItem(specie.evolution_chain.url);
+      let evolveChain = await fetchSingleItem(specie.evolution_chain.url);
+      let evolutions = await getEvolutions(evolveChain.chain, pokemon.name);
+      // console.log(evolutions)
       setPokemonData({ pokemon, abilities, specie, evolutions });
     };
     setData();
     // console.log(pokemonData)
   });
 
-  if (Object.entries(pokemonData.evolutions).length < 1) {
+  if (pokemonData.evolutions.length < 1) {
     return <div className="bg-slate-300">Cargando...</div>;
   }
   return (
@@ -144,7 +151,9 @@ export default function Pokemon() {
             })}
           </div>
           <div className="bg-slate-100">
-            <div><h4 className="text-center">Abilities</h4></div>
+            <div>
+              <h4 className="text-center">Abilities</h4>
+            </div>
             <Carousel
               className="max-h-full max-w-full overflow-hidden"
               responsive={responsive}
@@ -153,20 +162,20 @@ export default function Pokemon() {
               {pokemonData.abilities.map((ability) => {
                 return <PokeMoves key={ability.id} move={ability} />;
               })}
-              
             </Carousel>
           </div>
           <div className="bg-slate-600">
-              <div><h4 className="text-center">Evolutions</h4></div>
-              <Carousel
+            <div>
+              <h4 className="text-center">Evolutions</h4>
+            </div>
+            <Carousel
               responsive={responsive}
               removeArrowOnDeviceType={["tablet", "mobile"]}
-              
-              >
-                <div>pokemon1</div>
-                <div>pokemon2</div>
-                <div>pokemon3</div>
-              </Carousel>
+            >
+              <div>pokemon1</div>
+              <div>pokemon2</div>
+              <div>pokemon3</div>
+            </Carousel>
           </div>
         </div>
       </div>
