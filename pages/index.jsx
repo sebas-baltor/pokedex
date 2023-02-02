@@ -49,6 +49,7 @@ export default function Index({ pokemones }) {
               {pokemones.map((pokemon) => {
                 return <PokeCard pokemon={pokemon} key={pokemon.id} />;
               })}
+              
             </Carousel>
           </div>
       </div>

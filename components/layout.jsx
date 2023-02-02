@@ -23,7 +23,7 @@ export default function Layout({ children, home }) {
   return (
     <>
       <motion.nav
-        className="w-full fixed z-30 top-0 left-0 flex justify-between items-center p-2"
+        className="w-full fixed z-30 top-0 left-0 flex justify-between items-center p-2 bg-slate-100"
         animate={isOpen ? "open" : "closed"}
       >
         <motion.div className="font-bold">Pokedex</motion.div>
@@ -63,7 +63,7 @@ export default function Layout({ children, home }) {
             <div></div>
           )}
           <motion.li onClick={()=>setIsOpen(isOpen=>!isOpen)}>
-            <Link href={"/pokemon/byPage"} replace>Pokemones</Link>
+            <Link href={"/pokemon"} replace>Pokemones</Link>
           </motion.li>
           
         </motion.ul>
