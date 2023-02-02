@@ -6,6 +6,7 @@ import {
   fetchSingleItem,
   fetchMultipleItems,
   getEvolutions,
+  fetcherGetAllPokemonInfo
 } from "../../lib/pokemon";
 import {
   AiOutlineColumnHeight,
@@ -64,29 +65,11 @@ const decorators = [
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 export default function Pokemon() {
-  const [pokemonData, setPokemonData] = useState(null);
   const router = useRouter();
   const {id} = router.query;
-  // useEffect(() => {
-  //   const setData = async () => {
-  //     const { id } = router.query;
-  //     // let pokemon = await fetchSingleItem(
-  //     //   `https://pokeapi.co/api/v2/pokemon/${id}`
-  //     // );
-  //     let res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-  //     let pokemon = await res.json();
-  //     // let abilities = fetchMultipleItems(pokemon.abilities);
-  //     // let specie = await fetchSingleItem(pokemon.species.url);
-  //     // let evolveChain = await fetchSingleItem(specie.evolution_chain.url);
-  //     let evolutions = [];
-  //     // let evolutions = await getEvolutions(evolveChain.chain, pokemon.name);
-  //     setPokemonData({ pokemon });
-  //   };
-  //   setData();
-  //   // console.log(pokemonData)
-  const {data:pokemon,error,isLoading} = useSWR(`https://pokeapi.co/api/v2/pokemon/${id}`,fetcher);
-  // setPokemonData({pokemon:data});
-  // }, []);
+
+  const {data:pokemon,error,isLoading} = useSWR(`https://pokeapi.co/api/v2/pokemon/${id}`,fetcherGetAllPokemonInfo);
+
 
   if (error) {
     return <div className="bg-slate-300">faile fetching</div>;
