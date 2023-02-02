@@ -63,11 +63,9 @@ export default function Layout({ children, home }) {
             <div></div>
           )}
           <motion.li onClick={()=>setIsOpen(isOpen=>!isOpen)}>
-            <Link href={"/pokemon/byPage"} replace>Pokemon</Link>
+            <Link href={"/pokemon/byPage"} replace>Pokemones</Link>
           </motion.li>
-          <motion.li onClick={()=>setIsOpen(isOpen=>!isOpen)}>
-            <Link href={"/pokemon/1"} replace>Pokemon 1</Link>
-          </motion.li>
+          
         </motion.ul>
       </motion.nav>
       <main className="w-full">

@@ -29,6 +29,7 @@ export default function Index({ pokemones }) {
             height={300}
             width={300}
             alt="pikachu"
+            priority={true}
           />
         </div>
           <div className="w-full h-1/3 mt-16 flex fustify-center items-center">

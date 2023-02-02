@@ -24,22 +24,24 @@ export default function PokeCard({ pokemon }) {
         href={`./pokemon/${pokemon.id}`}
         className="bg-sky-100 hover:bg-cyan-100 rounded-md p-1 m-1 flex flex-col justify-between items-center p-3"
       >
-        {pokemon.sprites.other.dream_world.front_default ? (
+        {/* {pokemon.sprites.other.dream_world.front_default ? (
           <motion.img
-          className="w-1/2"
+          // className="w-1/2 h-full"
             animate={isHover ? "hover" : "leave"}
             variants={variantImg}
             src={pokemon.sprites.other.dream_world.front_default}
             alt={pokemon.name}
+            // width={100}
+            // height={100}
           />
-        ) : (
+        ) : ( */}
           <motion.img
             animate={isHover ? "hover" : "leave"}
             variants={variantImg}
             src={pokemon.sprites.front_default}
             alt={pokemon.name}
           />
-        )}
+        {/* )} */}
 
         <div className="font-bold">{pokemon.name.toUpperCase()}</div>
         <div className="flex justify-between">
